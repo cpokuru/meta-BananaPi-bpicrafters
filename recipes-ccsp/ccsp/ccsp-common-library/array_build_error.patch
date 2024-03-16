@@ -1,16 +1,3 @@
-diff --git a/source/ccsp/include/ccsp_message_bus.h b/source/ccsp/include/ccsp_message_bus.h
-index ce35cc33..64006bd2 100644
---- a/source/ccsp/include/ccsp_message_bus.h
-+++ b/source/ccsp/include/ccsp_message_bus.h
-@@ -156,6 +156,8 @@ typedef struct _CCSP_MESSAGE_FILTER
- 
- } CCSP_MESSAGE_FILTER;
- 
-+typedef struct DBusLoop DBusLoop;
-+
- typedef struct _CCSP_MESSAGE_BUS_CONNECTION
- {
-     DBusConnection *conn;
 diff --git a/source/util_api/ansc/AnscCrypto/ansc_crypto_random.c b/source/util_api/ansc/AnscCrypto/ansc_crypto_random.c
 index dd6ee5f3..261ca190 100644
 --- a/source/util_api/ansc/AnscCrypto/ansc_crypto_random.c
