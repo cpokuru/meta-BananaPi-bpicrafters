@@ -5,6 +5,7 @@ FILESEXTRAPATHS_append := "${THISDIR}/files:"
 
 SRC_URI_append += " \
     file://Fix-ccsp-eth-agent-build-error.patch;apply=no \
+    file://eroute0_to_lan1.patch;apply=no
 "
 
 do_filogic_patches() {
@@ -12,6 +13,7 @@ do_filogic_patches() {
 
     if [ ! -e filogic_patch_applied ] && [ "${PROJECT_BRANCH}" = "rdk-next" ]; then
         patch -p1 < ${WORKDIR}/Fix-ccsp-eth-agent-build-error.patch
+        patch -p1 < ${WORKDIR}/eroute0_to_lan1.patch
         touch filogic_patch_applied
     fi
 }
