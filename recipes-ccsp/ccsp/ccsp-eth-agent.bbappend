@@ -5,7 +5,7 @@ FILESEXTRAPATHS_append := "${THISDIR}/files:"
 
 SRC_URI_append += " \
     file://Fix-ccsp-eth-agent-build-error.patch;apply=no \
-    file://eroute0_to_lan1.patch;apply=no
+    file://eroute0_to_lan1.patch;apply=no \
 "
 
 do_filogic_patches() {
