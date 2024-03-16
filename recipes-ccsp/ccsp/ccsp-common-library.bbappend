@@ -32,13 +32,10 @@ SRC_URI_append_lxcbrc += "\
 # we need to patch to code for rpi
 SRC_URI_remove = "file://0001-DBusLoop-SSL_state-TLS_ST_OK.patch"
 
-SRC_URI_append = " file://0001-DBusLoop-SSL_state-TLS_ST_OK.patch;apply=no"
-
 do_rpi_patches () {
     cd ${S}
     if [ ! -e patch_applied ]; then
-        bbnote "Patching 0001-DBusLoop-SSL_state-TLS_ST_OK.patch"
-        patch -p1 < ${WORKDIR}/0001-DBusLoop-SSL_state-TLS_ST_OK.patch
+        bbnote "Patching arry_build_error.patch.patch"
         patch -p1 < ${WORKDIR}/array_build_error.patch
         touch patch_applied
     fi
