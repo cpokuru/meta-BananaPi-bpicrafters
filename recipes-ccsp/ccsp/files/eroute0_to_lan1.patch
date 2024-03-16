@@ -1,0 +1,14 @@
+diff --git a/source/TR-181/board_sbapi/cosa_ethernet_apis.c b/source/TR-181/board_sbapi/cosa_ethernet_apis.c
+index caf344d..bab3c8c 100644
+--- a/source/TR-181/board_sbapi/cosa_ethernet_apis.c
++++ b/source/TR-181/board_sbapi/cosa_ethernet_apis.c
+@@ -585,9 +585,9 @@ typedef enum WanMode
+ #elif defined (INTEL_PUMA7)
+ #define ETHWAN_DEF_INTF_NAME "nsgmii0"
+ #elif defined (_PLATFORM_TURRIS_)
+-#define ETHWAN_DEF_INTF_NAME "eth2"
++#define ETHWAN_DEF_INTF_NAME "lan1"
+ #else
+-#define ETHWAN_DEF_INTF_NAME "eth0"
++#define ETHWAN_DEF_INTF_NAME "lan1"
+ #endif

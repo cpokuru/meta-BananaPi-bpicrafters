@@ -11,7 +11,7 @@ CXXFLAGS_append = " \
 "
 
 SRC_URI_append = " \
-    file://array_build_error.patch \
+    file://array_build_error.patch;apply=no \
     file://ccsp_vendor.h \
     file://wifiinitialized.service \
     file://checkrpiwifisupport.service \
@@ -39,6 +39,7 @@ do_rpi_patches () {
     if [ ! -e patch_applied ]; then
         bbnote "Patching 0001-DBusLoop-SSL_state-TLS_ST_OK.patch"
         patch -p1 < ${WORKDIR}/0001-DBusLoop-SSL_state-TLS_ST_OK.patch
+        patch -p1 < ${WORKDIR}/array_build_error.patch
         touch patch_applied
     fi
 }
