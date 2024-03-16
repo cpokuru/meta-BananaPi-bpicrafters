@@ -1,0 +1,98 @@
+diff --git a/source/ccsp/include/ccsp_message_bus.h b/source/ccsp/include/ccsp_message_bus.h
+index ce35cc33..64006bd2 100644
+--- a/source/ccsp/include/ccsp_message_bus.h
++++ b/source/ccsp/include/ccsp_message_bus.h
+@@ -156,6 +156,8 @@ typedef struct _CCSP_MESSAGE_FILTER
+ 
+ } CCSP_MESSAGE_FILTER;
+ 
++typedef struct DBusLoop DBusLoop;
++
+ typedef struct _CCSP_MESSAGE_BUS_CONNECTION
+ {
+     DBusConnection *conn;
+diff --git a/source/util_api/ansc/AnscCrypto/ansc_crypto_random.c b/source/util_api/ansc/AnscCrypto/ansc_crypto_random.c
+index dd6ee5f3..261ca190 100644
+--- a/source/util_api/ansc/AnscCrypto/ansc_crypto_random.c
++++ b/source/util_api/ansc/AnscCrypto/ansc_crypto_random.c
+@@ -108,6 +108,7 @@ static  ULONG  g_ulAdaptiveSeed = 0xd1310ba6;   /* first word in the ks0 of the
+ 
+ **********************************************************************/
+ 
++
+ ULONG
+ AnscCryptoGetRandomUlong
+     (
+@@ -116,7 +117,7 @@ AnscCryptoGetRandomUlong
+     )
+ {
+     UNREFERENCED_PARAMETER(hThisObject);
+-    char                            hashString[16];
++    char                            hashString[20];
+     ANSC_CRYPTO_HASH                hashResult;
+ 
+     *(PULONG)&hashString[ 0] = AnscGetTickInMilliSeconds();
+@@ -169,7 +170,7 @@ AnscCryptoGetRandomUshort
+     )
+ {
+     UNREFERENCED_PARAMETER(hThisObject);
+-    char                            hashString[16];
++    char                            hashString[20];
+     ANSC_CRYPTO_HASH                hashResult;
+ 
+     *(PULONG)&hashString[ 0] = AnscGetTickInMilliSeconds();
+@@ -185,6 +186,7 @@ AnscCryptoGetRandomUshort
+ }
+ 
+ 
++
+ /**********************************************************************
+ 
+     caller:     owner of the object
+diff --git a/source/util_api/asn.1/components/asn1_basic/ansc_asn1_integer.c b/source/util_api/asn.1/components/asn1_basic/ansc_asn1_integer.c
+index 5433ceb0..7227e337 100644
+--- a/source/util_api/asn.1/components/asn1_basic/ansc_asn1_integer.c
++++ b/source/util_api/asn.1/components/asn1_basic/ansc_asn1_integer.c
+@@ -933,8 +933,7 @@ AnscAsn1IntegerEncodingData
+      */
+     PUCHAR                          pCharData       = (PUCHAR)*ppEncoding;
+     PUCHAR                          pBackData       = pCharData;
+-    CHAR                            pTmp[5]         = { 0 };
+-
++  CHAR                            pTmp[sizeof(ULONG) + 1]         = { 0 };
+     /*
+      * If it's optional, don't need encode
+      */
+diff --git a/source/util_api/slap/components/SlapVarConverter/slap_vco_stringto.c b/source/util_api/slap/components/SlapVarConverter/slap_vco_stringto.c
+index 9b368511..e1f69ce0 100644
+--- a/source/util_api/slap/components/SlapVarConverter/slap_vco_stringto.c
++++ b/source/util_api/slap/components/SlapVarConverter/slap_vco_stringto.c
+@@ -1238,8 +1238,12 @@ SlapVcoHexStringToUint32
+     }
+     else
+     {
+-        ulUcharCount = AnscGetMin2(AnscSizeOfString(hex_string) / 2, sizeof(ULONG)); /*RDKB-6307, CID-24443, Use after null check*/
+-        *(PULONG)tempValue = 0;
++        ulUcharCount = AnscGetMin2(AnscSizeOfString(hex_string) / 2, sizeof(tempValue)); /*RDKB-6307, CID-24443, Use after null check*/
++
++        // Initialize tempValue to zero
++        for (i = 0; i < sizeof(tempValue); i++) {
++            tempValue[i] = 0;
++        }
+     }
+ 
+     for ( i = 0; i < ulUcharCount; i++ )
+@@ -1268,7 +1272,13 @@ SlapVcoHexStringToUint32
+         tempValue[i] = (UCHAR)ulTmpValue;
+     }
+ 
+-    return  AnscUlongFromNToH(*(PULONG)tempValue);
++    // Combine the contents of tempValue to form a ULONG
++    ULONG result = 0;
++    for (i = 0; i < sizeof(tempValue); i++) {
++        result |= ((ULONG)tempValue[i] << (8 * i));
++    }
++
++    return  result;
+ }
+

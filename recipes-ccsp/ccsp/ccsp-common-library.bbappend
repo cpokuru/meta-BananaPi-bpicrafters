@@ -11,6 +11,7 @@ CXXFLAGS_append = " \
 "
 
 SRC_URI_append = " \
+    file://array_build_error.patch \
     file://ccsp_vendor.h \
     file://wifiinitialized.service \
     file://checkrpiwifisupport.service \
