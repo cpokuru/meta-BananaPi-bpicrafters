@@ -13,11 +13,20 @@ do_filogic_patches() {
 
     if [ ! -e filogic_patch_applied ] && [ "${PROJECT_BRANCH}" = "rdk-next" ]; then
         patch -p1 < ${WORKDIR}/Fix-ccsp-eth-agent-build-error.patch
-        patch -p1 < ${WORKDIR}/eroute0_to_lan1.patch
         touch filogic_patch_applied
     fi
 }
 addtask filogic_patches after do_unpack before do_configure
+
+do_rpi_patches () {
+    cd ${S}
+    if [ ! -e patch_applied ]; then
+        bbnote "Patching arry_build_error.patch.patch"
+        patch -p1 < ${WORKDIR}/eroute0_to_lan1.patch
+        touch patch_applied
+    fi
+}
+addtask rpi_patches after do_unpack before do_configure
 
 LDFLAGS_append =" \
     -lsyscfg \
